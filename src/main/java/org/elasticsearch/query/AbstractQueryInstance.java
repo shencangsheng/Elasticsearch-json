@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * 〈一句话功能简述〉<br>
+ * query的抽象类 <br>
  * 〈〉
  *
  * @author shencangsheng

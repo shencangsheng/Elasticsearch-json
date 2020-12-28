@@ -15,7 +15,7 @@ import org.elasticsearch.query.type.QueryBoolEnum;
 import org.elasticsearch.query.type.QueryMappingEnum;
 
 /**
- * 〈一句话功能简述〉<br>
+ *  字段的属性模块 <br>
  * 〈〉
  *
  * @author shencangsheng

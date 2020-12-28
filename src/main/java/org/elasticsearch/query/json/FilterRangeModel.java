@@ -13,7 +13,7 @@ package org.elasticsearch.query.json;
 import lombok.Data;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 针对于range类型的检索,可接受的值类型为 double,long,date <br>
  * 〈〉
  *
  * @author shencangsheng

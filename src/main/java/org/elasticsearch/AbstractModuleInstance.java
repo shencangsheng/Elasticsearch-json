@@ -18,7 +18,7 @@ import java.util.Objects;
 import static java.lang.String.format;
 
 /**
- * 〈一句话功能简述〉<br>
+ * 模块的抽象类,所有使用query都必须实现这个类 <br>
  * 〈〉
  *
  * @author shencangsheng
