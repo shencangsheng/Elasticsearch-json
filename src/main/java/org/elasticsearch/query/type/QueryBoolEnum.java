@@ -13,5 +13,5 @@ import lombok.RequiredArgsConstructor;
 public enum QueryBoolEnum {
     FILTER,
     SHOULD,
-    MUST_NOT
+    MUST_NOT;
 }
