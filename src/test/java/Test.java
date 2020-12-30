@@ -11,9 +11,9 @@
 
 import com.google.common.collect.Lists;
 import org.elasticsearch.AbstractModuleInstance;
-import org.elasticsearch.query.json.BaseFilterModel;
+import org.elasticsearch.query.json.QueryFilterModel;
 import org.elasticsearch.query.model.QueryNestedInstance;
-import org.elasticsearch.query.model.QueryOrdinaryInstance;
+import org.elasticsearch.query.model.QueryDefaultInstance;
 
 import java.util.HashMap;
 
@@ -29,13 +29,13 @@ public class Test extends AbstractModuleInstance {
 
     public Test() {
         this.modules = new HashMap() {{
-            put("PATIENT", new QueryOrdinaryInstance());
+            put("PATIENT", new QueryDefaultInstance());
             put("ORDER", new QueryNestedInstance());
         }};
     }
 
     public static void main(String[] args) {
-        BaseFilterModel baseFilterModel = new BaseFilterModel<>();
+        QueryFilterModel baseFilterModel = new QueryFilterModel<>();
         baseFilterModel.setData(Lists.newArrayList("张三", "李四"));
     }
 }

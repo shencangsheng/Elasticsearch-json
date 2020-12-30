@@ -22,10 +22,9 @@ import static org.elasticsearch.query.type.QueryMappingEnum.*;
  * @create 2020/12/28
  * @since 1.0.0
  */
-public class QueryOrdinaryInstance extends AbstractQueryInstance {
+public class QueryDefaultInstance extends AbstractQueryInstance {
 
-    public QueryOrdinaryInstance() {
-        setPath("user");
+    public QueryDefaultInstance() {
         createMappingPutInstance("name", WILDCARD);
         createMappingPutInstance("age", LONG);
         createMappingPutInstance("gender", KEYWORD);

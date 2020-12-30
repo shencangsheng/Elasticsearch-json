@@ -21,7 +21,7 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
-public class FilterRangeModel<T> {
+public class QueryRangeModel<T> {
     private T gte;
     private T lt;
 }
