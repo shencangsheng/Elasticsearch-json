@@ -1,0 +1,89 @@
+/**
+ * Copyright (C), 2015-2020, XXX有限公司
+ * FileName: QueryBoolJob
+ * Author:   shencangsheng
+ * Date:     2020/12/30 5:41 下午
+ * Description:
+ * History:
+ * <author>          <time>          <version>          <desc>
+ * 作者姓名           修改时间           版本号              描述
+ */
+package org.elasticsearch.query.jobs;
+
+import org.elasticsearch.index.query.*;
+import org.elasticsearch.query.MappingInstance;
+import org.elasticsearch.query.json.Query;
+import org.elasticsearch.query.methods.QueryRencapsulation;
+
+import java.util.Objects;
+
+import static java.lang.String.format;
+import static org.elasticsearch.query.type.QueryBoolEnum.FILTER;
+
+/**
+ * 〈一句话功能简述〉<br>
+ * 〈〉
+ *
+ * @author shencangsheng
+ * @create 2020/12/30
+ * @since 1.0.0
+ */
+public class QueryBoolJob {
+    public static final AbstractQueryBuilder queryProcessingFlow(MappingInstance instance, Query query) throws Exception {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        AbstractQueryBuilder abstractQueryBuilder = flow(instance, query);
+        switch (Objects.nonNull(query.getBoolType()) ? query.getBoolType() : FILTER) {
+            case FILTER:
+                boolQueryBuilder.filter(abstractQueryBuilder);
+                break;
+            case SHOULD:
+                boolQueryBuilder.minimumShouldMatch(instance.getMinimumShouldMatch());
+                boolQueryBuilder.should(abstractQueryBuilder);
+                break;
+            case MUST_NOT:
+                boolQueryBuilder.mustNot(abstractQueryBuilder);
+                break;
+            default:
+                throw new IllegalArgumentException(String.format("Type %s was not found", query.getBoolType()));
+        }
+        return boolQueryBuilder;
+    }
+
+    public static AbstractQueryBuilder flow(MappingInstance instance, Query query) throws Exception {
+        switch (instance.getType()) {
+            case KEYWORD:
+            case STRING:
+                return terms(instance, query);
+            case DATE:
+            case LONG:
+            case DOUBLE:
+                return range(instance, query);
+            case WILDCARD:
+                return wildcard(instance, query);
+            case NESTED:
+
+
+        }
+        throw new IllegalArgumentException(format("Type %s was not found", instance.getType()));
+    }
+
+
+    public static RangeQueryBuilder range(MappingInstance instance, Query query) throws Exception {
+        return QueryRencapsulation.range(instance.getKey(), instance.getType(), query.rangeData());
+    }
+
+    public static TermsQueryBuilder terms(MappingInstance instance, Query query) {
+        return QueryRencapsulation.terms(instance.getKey(), query.listData());
+    }
+
+    public static BoolQueryBuilder wildcard(MappingInstance instance, Query query) {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().minimumShouldMatch(1);
+        query.listData().forEach(element -> boolQueryBuilder.should(QueryRencapsulation.wildcard(instance.getKey(), (String) element)));
+        return boolQueryBuilder;
+    }
+
+
+    public static AbstractQueryBuilder nested(MappingInstance instance, Query query) {
+        return null;
+    }
+}

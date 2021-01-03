@@ -22,6 +22,8 @@ import lombok.Data;
  */
 @Data
 public class QueryRangeModel<T> {
+    private T gt;
     private T gte;
     private T lt;
+    private T lte;
 }

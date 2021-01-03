@@ -11,7 +11,7 @@
 
 import com.google.common.collect.Lists;
 import org.elasticsearch.AbstractModuleInstance;
-import org.elasticsearch.query.json.QueryFilterModel;
+import org.elasticsearch.query.json.Query;
 import org.elasticsearch.query.model.QueryNestedInstance;
 import org.elasticsearch.query.model.QueryDefaultInstance;
 
@@ -35,7 +35,7 @@ public class Test extends AbstractModuleInstance {
     }
 
     public static void main(String[] args) {
-        QueryFilterModel baseFilterModel = new QueryFilterModel<>();
+        Query baseFilterModel = new Query<>();
         baseFilterModel.setData(Lists.newArrayList("张三", "李四"));
     }
 }

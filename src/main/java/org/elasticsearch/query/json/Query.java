@@ -29,7 +29,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QueryFilterModel<T> {
+public class Query<T> {
     @NonNull
     private String key;
     private QueryBoolEnum boolType;
@@ -37,15 +37,19 @@ public class QueryFilterModel<T> {
     private T data;
     private String title;
 
-    public List dataList() {
+    public List listData() {
         return (List) data;
     }
 
-    public QueryRangeModel dataRange() {
+    public QueryRangeModel rangeData() {
         return (QueryRangeModel) data;
     }
 
-    public List<QueryFilterModel> dataGroup() {
-        return (List<QueryFilterModel>) data;
+    public List<Query> groupData() {
+        return (List<Query>) data;
+    }
+
+    public String StringData() {
+        return (String) data;
     }
 }
