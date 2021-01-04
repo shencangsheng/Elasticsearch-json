@@ -8,9 +8,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package org.elasticsearch;
-
-import org.elasticsearch.query.AbstractQueryInstance;
+package org.elasticsearch.query;
 
 import java.util.Map;
 import java.util.Objects;

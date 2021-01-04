@@ -10,7 +10,7 @@
  */
 
 import com.google.common.collect.Lists;
-import org.elasticsearch.AbstractModuleInstance;
+import org.elasticsearch.query.AbstractModuleInstance;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.model.CentricModel;
 import org.elasticsearch.model.QueryModel;

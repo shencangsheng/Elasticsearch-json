@@ -11,7 +11,7 @@
 package org.elasticsearch.query.jobs;
 
 import org.apache.lucene.search.join.ScoreMode;
-import org.elasticsearch.AbstractModuleInstance;
+import org.elasticsearch.query.AbstractModuleInstance;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.model.CentricModel;
 import org.elasticsearch.model.QueryModel;
