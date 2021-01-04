@@ -10,7 +10,7 @@
  */
 package org.elasticsearch.query.json;
 
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * 针对于range类型的检索,可接受的值类型为 double,long,date <br>
@@ -20,10 +20,30 @@ import lombok.Data;
  * @create 2020/12/28
  * @since 1.0.0
  */
-@Data
-public class QueryRangeModel<T> {
+@Getter
+public class QueryRange<T> {
     private T gt;
     private T gte;
     private T lt;
     private T lte;
+
+    public QueryRange setGt(T gt) {
+        this.gt = gt;
+        return this;
+    }
+
+    public QueryRange setGte(T gte) {
+        this.gte = gte;
+        return this;
+    }
+
+    public QueryRange setLt(T lt) {
+        this.lt = lt;
+        return this;
+    }
+
+    public QueryRange setLte(T lte) {
+        this.lte = lte;
+        return this;
+    }
 }

@@ -11,7 +11,7 @@
 package org.elasticsearch.query.methods;
 
 import org.elasticsearch.index.query.*;
-import org.elasticsearch.query.json.QueryRangeModel;
+import org.elasticsearch.query.json.QueryRange;
 import org.elasticsearch.query.type.QueryMappingEnum;
 import org.util.DateUtil;
 
@@ -43,7 +43,7 @@ public class QueryRencapsulation {
         return QueryBuilders.wildcardQuery(name, value);
     }
 
-    public static RangeQueryBuilder range(String name, QueryMappingEnum type, QueryRangeModel range) throws Exception {
+    public static RangeQueryBuilder range(String name, QueryMappingEnum type, QueryRange range) throws Exception {
         RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(name);
         if (type == QueryMappingEnum.DATE) {
             if (Objects.nonNull(range.getGt())) {

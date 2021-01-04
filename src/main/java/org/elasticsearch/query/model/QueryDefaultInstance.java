@@ -25,6 +25,7 @@ import static org.elasticsearch.query.type.QueryMappingEnum.*;
 public class QueryDefaultInstance extends AbstractQueryInstance {
 
     public QueryDefaultInstance() {
+        setPath("user");
         createMappingPutInstance("name", WILDCARD);
         createMappingPutInstance("age", LONG);
         createMappingPutInstance("gender", KEYWORD);

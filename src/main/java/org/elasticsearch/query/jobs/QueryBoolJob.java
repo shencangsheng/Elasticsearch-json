@@ -10,7 +10,12 @@
  */
 package org.elasticsearch.query.jobs;
 
+import org.apache.lucene.search.join.ScoreMode;
+import org.elasticsearch.AbstractModuleInstance;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.model.CentricModel;
+import org.elasticsearch.model.QueryModel;
+import org.elasticsearch.query.AbstractQueryInstance;
 import org.elasticsearch.query.MappingInstance;
 import org.elasticsearch.query.json.Query;
 import org.elasticsearch.query.methods.QueryRencapsulation;
@@ -29,8 +34,25 @@ import static org.elasticsearch.query.type.QueryBoolEnum.FILTER;
  * @since 1.0.0
  */
 public class QueryBoolJob {
-    public static final AbstractQueryBuilder queryProcessingFlow(MappingInstance instance, Query query) throws Exception {
+
+    public static final BoolQueryBuilder createQueryStatements(CentricModel model, AbstractModuleInstance moduleInstance) throws Exception {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        for (QueryModel element : model.getQuery()) {
+            AbstractQueryInstance queryInstance = moduleInstance.getModule(element.getModule());
+            if (queryInstance.isNested()) {
+                boolQueryBuilder.filter(nested(queryInstance, element));
+            } else {
+                flowQueryBuilder(queryInstance, boolQueryBuilder, element);
+            }
+        }
+        if (Objects.nonNull(model.getDsl())) {
+            boolQueryBuilder = QueryBuilders.boolQuery().filter(QueryBuilders.wrapperQuery(model.getDsl())).filter(boolQueryBuilder);
+        }
+        return boolQueryBuilder;
+    }
+
+
+    public static final AbstractQueryBuilder queryProcessingFlow(BoolQueryBuilder boolQueryBuilder, MappingInstance instance, Query query) throws Exception {
         AbstractQueryBuilder abstractQueryBuilder = flow(instance, query);
         switch (Objects.nonNull(query.getBoolType()) ? query.getBoolType() : FILTER) {
             case FILTER:
@@ -60,9 +82,6 @@ public class QueryBoolJob {
                 return range(instance, query);
             case WILDCARD:
                 return wildcard(instance, query);
-            case NESTED:
-
-
         }
         throw new IllegalArgumentException(format("Type %s was not found", instance.getType()));
     }
@@ -83,7 +102,16 @@ public class QueryBoolJob {
     }
 
 
-    public static AbstractQueryBuilder nested(MappingInstance instance, Query query) {
-        return null;
+    public static AbstractQueryBuilder nested(AbstractQueryInstance queryInstance, QueryModel query) throws Exception {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        flowQueryBuilder(queryInstance, boolQueryBuilder, query);
+        return QueryBuilders.nestedQuery(queryInstance.getPath(), boolQueryBuilder, ScoreMode.None);
+    }
+
+    public static AbstractQueryBuilder flowQueryBuilder(AbstractQueryInstance queryInstance, BoolQueryBuilder boolQueryBuilder, QueryModel query) throws Exception {
+        for (Query element : query.getQuery()) {
+            queryProcessingFlow(boolQueryBuilder, queryInstance.getInstance().get(element.getKey()), element);
+        }
+        return boolQueryBuilder;
     }
 }

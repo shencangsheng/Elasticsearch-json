@@ -11,9 +11,14 @@
 
 import com.google.common.collect.Lists;
 import org.elasticsearch.AbstractModuleInstance;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.model.CentricModel;
+import org.elasticsearch.model.QueryModel;
+import org.elasticsearch.query.jobs.QueryBoolJob;
 import org.elasticsearch.query.json.Query;
-import org.elasticsearch.query.model.QueryNestedInstance;
+import org.elasticsearch.query.json.QueryRange;
 import org.elasticsearch.query.model.QueryDefaultInstance;
+import org.elasticsearch.query.model.QueryNestedInstance;
 
 import java.util.HashMap;
 
@@ -29,13 +34,28 @@ public class Test extends AbstractModuleInstance {
 
     public Test() {
         this.modules = new HashMap() {{
-            put("PATIENT", new QueryDefaultInstance());
+            put("USER", new QueryDefaultInstance());
             put("ORDER", new QueryNestedInstance());
         }};
     }
 
-    public static void main(String[] args) {
-        Query baseFilterModel = new Query<>();
-        baseFilterModel.setData(Lists.newArrayList("张三", "李四"));
+    public static void main(String[] args) throws Exception {
+        CentricModel model = new CentricModel();
+        model.setDsl("{\"bool\": {\"filter\": [{\"terms\": {\"user.phone\": [\"1300000000\"] } } ] } }");
+        QueryModel user = new QueryModel("USER", Lists.newArrayList(
+                new Query("name", Lists.newArrayList("张*三", "李*")),
+                new Query("age", new QueryRange().setGt(20)),
+                new Query("gender", Lists.newArrayList("男"))
+        ));
+
+        QueryModel order = new QueryModel("ORDER", Lists.newArrayList(
+                new Query("id", Lists.newArrayList("0001", "0002"))
+        ));
+        model.setQuery(Lists.newArrayList(
+                user,
+                order
+        ));
+        BoolQueryBuilder boolQueryBuilder = QueryBoolJob.createQueryStatements(model, new Test());
+        System.out.println(boolQueryBuilder.toString());
     }
 }

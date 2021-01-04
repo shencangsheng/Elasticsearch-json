@@ -1,8 +1,8 @@
 /**
- * Copyright (C), 2015-2020, XXX有限公司
- * FileName: CentricModel
+ * Copyright (C), 2015-2021, XXX有限公司
+ * FileName: QueryModel
  * Author:   shencangsheng
- * Date:     2020/12/30 5:40 下午
+ * Date:     2021/1/4 1:59 下午
  * Description:
  * History:
  * <author>          <time>          <version>          <desc>
@@ -12,22 +12,21 @@ package org.elasticsearch.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.elasticsearch.query.json.Query;
 
 import java.util.List;
 
 /**
- * 〈一句话功能简述〉<br>
+ * 〈一句话功能简述〉<br> 
  * 〈〉
  *
  * @author shencangsheng
- * @create 2020/12/30
+ * @create 2021/1/4
  * @since 1.0.0
  */
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-public class CentricModel {
-    private List<QueryModel> query;
-    private String dsl;
+public class QueryModel {
+    private String module;
+    private List<Query> query;
 }

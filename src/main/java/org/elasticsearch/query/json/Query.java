@@ -41,8 +41,8 @@ public class Query<T> {
         return (List) data;
     }
 
-    public QueryRangeModel rangeData() {
-        return (QueryRangeModel) data;
+    public QueryRange rangeData() {
+        return (QueryRange) data;
     }
 
     public List<Query> groupData() {
@@ -51,5 +51,10 @@ public class Query<T> {
 
     public String StringData() {
         return (String) data;
+    }
+
+    public Query(@NonNull String key, @NonNull T data) {
+        this.key = key;
+        this.data = data;
     }
 }

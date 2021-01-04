@@ -14,6 +14,5 @@ public enum QueryMappingEnum {
     KEYWORD,
     DATE,
     GROUP,
-    NESTED,
     WILDCARD;
 }
