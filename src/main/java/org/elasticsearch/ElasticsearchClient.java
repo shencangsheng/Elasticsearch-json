@@ -12,12 +12,10 @@ package org.elasticsearch;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.Nullable;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
@@ -57,7 +55,7 @@ public class ElasticsearchClient {
         return this;
     }
 
-    public ElasticsearchClient(@NonNull final String index) {
+    public ElasticsearchClient(final String index) {
         searchRequest.indices(index);
     }
 
@@ -66,13 +64,13 @@ public class ElasticsearchClient {
         return this;
     }
 
-    public ElasticsearchClient setFetchSource(@Nullable String[] includes, @Nullable String[] excludes) {
+    public ElasticsearchClient setFetchSource(String[] includes, String[] excludes) {
         searchSourceBuilder.fetchSource(true);
         searchSourceBuilder.fetchSource(includes, excludes);
         return this;
     }
 
-    public ElasticsearchClient setFrom(@NonNull int from) {
+    public ElasticsearchClient setFrom(int from) {
         searchSourceBuilder.from(from);
         return this;
     }
