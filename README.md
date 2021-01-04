@@ -32,5 +32,5 @@ elasticsearch，通过简单的json获取复杂的检索/聚合DSL
       ]
     }
   ],
-  "dsl": "{\"bool\": {\"filter\": [{\"terms\": {\"user.phone\": [\"1300000000\"] } } ] } }"
+  "dsl": "{\"bool\": {\"filter\": [{\"terms\": {\"phone\": [\"1300000000\"] } } ] } }"
 }
