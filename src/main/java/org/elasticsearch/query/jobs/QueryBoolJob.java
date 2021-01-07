@@ -132,7 +132,7 @@ public class QueryBoolJob {
         if (Objects.nonNull(notBoolQuery)) {
             boolQueryBuilder.mustNot(QueryBuilders.nestedQuery(queryInstance.getPath(), notBoolQuery, ScoreMode.None));
         }
-        return QueryBuilders.nestedQuery(queryInstance.getPath(), boolQueryBuilder, ScoreMode.None);
+        return boolQueryBuilder;
     }
 
     public static AbstractQueryBuilder flowQueryBuilder(AbstractQueryInstance queryInstance, BoolQueryBuilder boolQueryBuilder, QueryModel query) throws Exception {
