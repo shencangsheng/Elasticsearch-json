@@ -45,7 +45,12 @@ public class Test extends AbstractModuleInstance {
         QueryModel user = new QueryModel("USER", Lists.newArrayList(
                 new Query("name", Lists.newArrayList("张*三", "李*")),
                 new Query("age", new QueryRange().setGt(20)),
-                new Query("gender", Lists.newArrayList("男"))
+                new Query("gender", Lists.newArrayList("男")),
+                new Query("city", Lists.newArrayList(new Query("四川", Lists.newArrayList("成都", "重庆")))),
+                new Query("countries", Lists.newArrayList(
+                        new Query("中国", Lists.newArrayList(new Query("四川", Lists.newArrayList("成都", "重庆")))),
+                        new Query("美国", Lists.newArrayList(new Query("得克萨斯州", Lists.newArrayList("小镇"))))
+                ))
         ));
 
         QueryModel order = new QueryModel("ORDER", Lists.newArrayList(

@@ -35,7 +35,6 @@ public class Query<T> {
     private QueryBoolEnum boolType;
     @NonNull
     private T data;
-    private String title;
 
     public List listData() {
         return (List) data;
@@ -45,12 +44,12 @@ public class Query<T> {
         return (QueryRange) data;
     }
 
-    public List<Query> groupData() {
-        return (List<Query>) data;
-    }
-
     public String StringData() {
         return (String) data;
+    }
+
+    public List<Query> groupData() {
+        return (List<Query>) data;
     }
 
     public Query(@NonNull String key, @NonNull T data) {

@@ -28,5 +28,8 @@ public class QueryDefaultInstance extends AbstractQueryInstance {
         createMappingPutInstance("name", WILDCARD);
         createMappingPutInstance("age", LONG);
         createMappingPutInstance("gender", KEYWORD);
+        createMappingPutInstance("provinces", KEYWORD);
+        createMappingPutInstance("city", GROUP, getInstance().get("provinces"));
+        createMappingPutInstance("countries", GROUP, getInstance().get("city"));
     }
 }

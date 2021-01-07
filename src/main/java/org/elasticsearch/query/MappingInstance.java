@@ -11,6 +11,7 @@
 package org.elasticsearch.query;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.elasticsearch.query.type.QueryBoolEnum;
 import org.elasticsearch.query.type.QueryMappingEnum;
 
@@ -28,6 +29,7 @@ public class MappingInstance {
     private final QueryMappingEnum type;
     private QueryBoolEnum bool = QueryBoolEnum.FILTER;
     private Integer minimumShouldMatch = 1;
+    @Setter
     private MappingInstance next;
 
     public MappingInstance(String key, QueryMappingEnum type) {

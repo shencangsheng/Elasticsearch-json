@@ -64,4 +64,15 @@ public abstract class AbstractQueryInstance {
     public AbstractQueryInstance createMappingPutInstance(String name, QueryMappingEnum type) {
         return createMappingPutInstance(name, name, type);
     }
+
+    public AbstractQueryInstance createMappingPutInstance(String name, QueryMappingEnum type, MappingInstance next) {
+        return createMappingPutInstance(name, name, type, next);
+    }
+
+    public AbstractQueryInstance createMappingPutInstance(String name, String key, QueryMappingEnum type, MappingInstance next) {
+        MappingInstance instance = createMappingInstance(key, type);
+        instance.setNext(next);
+        put(name, instance);
+        return this;
+    }
 }

@@ -11,19 +11,21 @@
 package org.elasticsearch.query.jobs;
 
 import org.apache.lucene.search.join.ScoreMode;
-import org.elasticsearch.query.AbstractModuleInstance;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.model.CentricModel;
 import org.elasticsearch.model.QueryModel;
+import org.elasticsearch.query.AbstractModuleInstance;
 import org.elasticsearch.query.AbstractQueryInstance;
 import org.elasticsearch.query.MappingInstance;
 import org.elasticsearch.query.json.Query;
 import org.elasticsearch.query.methods.QueryRencapsulation;
 
+import java.util.List;
 import java.util.Objects;
 
 import static java.lang.String.format;
 import static org.elasticsearch.query.type.QueryBoolEnum.FILTER;
+import static org.elasticsearch.query.type.QueryBoolEnum.MUST_NOT;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -50,7 +52,6 @@ public class QueryBoolJob {
         }
         return boolQueryBuilder;
     }
-
 
     public static final AbstractQueryBuilder queryProcessingFlow(BoolQueryBuilder boolQueryBuilder, MappingInstance instance, Query query) throws Exception {
         AbstractQueryBuilder abstractQueryBuilder = flow(instance, query);
@@ -82,6 +83,8 @@ public class QueryBoolJob {
                 return range(instance, query);
             case WILDCARD:
                 return wildcard(instance, query);
+            case GROUP:
+                return group(instance, query);
         }
         throw new IllegalArgumentException(format("Type %s was not found", instance.getType()));
     }
@@ -95,6 +98,10 @@ public class QueryBoolJob {
         return QueryRencapsulation.terms(instance.getKey(), query.listData());
     }
 
+    public static TermQueryBuilder term(MappingInstance instance, Query query) {
+        return QueryRencapsulation.term(instance.getKey(), query.getData());
+    }
+
     public static BoolQueryBuilder wildcard(MappingInstance instance, Query query) {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().minimumShouldMatch(1);
         query.listData().forEach(element -> boolQueryBuilder.should(QueryRencapsulation.wildcard(instance.getKey(), (String) element)));
@@ -104,7 +111,27 @@ public class QueryBoolJob {
 
     public static AbstractQueryBuilder nested(AbstractQueryInstance queryInstance, QueryModel query) throws Exception {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        flowQueryBuilder(queryInstance, boolQueryBuilder, query);
+        BoolQueryBuilder notBoolQuery = null;
+        BoolQueryBuilder boolQuery = null;
+        for (Query element : query.getQuery()) {
+            if (element.getBoolType() == MUST_NOT) {
+                element.setBoolType(FILTER);
+                if (Objects.isNull(notBoolQuery)) {
+                    notBoolQuery = QueryBuilders.boolQuery();
+                }
+                queryProcessingFlow(notBoolQuery, queryInstance.getInstance().get(element.getKey()), element);
+            } else {
+                if (Objects.isNull(boolQuery))
+                    boolQuery = QueryBuilders.boolQuery();
+                queryProcessingFlow(boolQueryBuilder, queryInstance.getInstance().get(element.getKey()), element);
+            }
+        }
+        if (Objects.nonNull(boolQuery)) {
+            boolQueryBuilder.filter(QueryBuilders.nestedQuery(queryInstance.getPath(), boolQuery, ScoreMode.None));
+        }
+        if (Objects.nonNull(notBoolQuery)) {
+            boolQueryBuilder.mustNot(QueryBuilders.nestedQuery(queryInstance.getPath(), notBoolQuery, ScoreMode.None));
+        }
         return QueryBuilders.nestedQuery(queryInstance.getPath(), boolQueryBuilder, ScoreMode.None);
     }
 
@@ -112,6 +139,18 @@ public class QueryBoolJob {
         for (Query element : query.getQuery()) {
             queryProcessingFlow(boolQueryBuilder, queryInstance.getInstance().get(element.getKey()), element);
         }
+        return boolQueryBuilder;
+    }
+
+    public static AbstractQueryBuilder group(MappingInstance instance, Query query) throws Exception {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        List<Query> list = query.groupData();
+        for (Query element : list) {
+            BoolQueryBuilder builder = QueryBuilders.boolQuery().filter(QueryRencapsulation.term(instance.getKey(), element.getKey()));
+            queryProcessingFlow(builder, instance.getNext(), element);
+            boolQueryBuilder.should(builder);
+        }
+        boolQueryBuilder.minimumShouldMatch(instance.getMinimumShouldMatch());
         return boolQueryBuilder;
     }
 }
