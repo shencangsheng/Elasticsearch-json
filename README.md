@@ -1,5 +1,5 @@
 # elasticsearch-json
-elasticsearch，通过简单的json获取复杂的检索/聚合DSL
+通过简单的json获取elasticsearch复杂的检索/聚合DSL
 
 {
   "query": [
