@@ -1,6 +1,6 @@
 # elasticsearch-json
 通过简单的json获取elasticsearch复杂的检索/聚合DSL
-
+```json
 {
   "query": [
     {
@@ -34,3 +34,4 @@
   ],
   "dsl": "{\"bool\": {\"filter\": [{\"terms\": {\"phone\": [\"1300000000\"] } } ] } }"
 }
+```
