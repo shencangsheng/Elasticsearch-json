@@ -19,7 +19,7 @@
 
     <repositories>
         <repository>
-            <id>com.genecast.model.elasticsearch-releases</id>
+            <id>com.shencangsheng.model.elasticsearch-releases</id>
             <url>https://artifacts.elastic.co/maven</url>
             <releases>
                 <enabled>true</enabled>
